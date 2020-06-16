@@ -1,0 +1,25 @@
+X 1 #00ff00
+C 2 100
+T F #c280ff 100 100
+S Shift+K 50 75
+L1 Ctrl+W #0000ff 255 0
+R1 Ctrl+E 0 255
+L2 Alt+Q 0 0
+R2 Alt+E #1cd200 17
+Share Ctrl+Shift+Alt+6 #00ee00 0 200
+Options backspace
+PS Shift+Tab #2ef141 0 101
+L3 U
+R3 I
+L3L Y
+L3R X
+L3U C
+L3D V
+R3L Shift+Y #0f1234 0 0
+R3R Shift+X #0faa3b 25 50
+R3U Shift+C #0f7db4 150 175
+R3D Shift+V #0f1234 200 0
+DPADL A
+DPADR D
+DPADU W
+DPADD S

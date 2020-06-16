@@ -12,7 +12,7 @@ Linux userspace driver for DUALSHOCK®4
 [5. FAQ](#FAQ)
 
 <a name="Introduction"></a>
-##Introduction
+## Introduction
 For questions and answers please see [FAQ](#FAQ). 
 
 This is a Linux userspace driver for DUALSHOCK®4. It provides
@@ -20,12 +20,15 @@ user with ability to map controller's buttons to keyboard buttons, assign macros
 ability to change color and add rumble on button press.
  
 <a name="Config"></a>
+## Configuration
+Configuration files describe button mapping. This is described in detail
+in ./tools/README.md
 
 <a name="Building"></a>
 <a name="Running"></a>
 
 <a name="FAQ"></a>
-##FAQ
+## FAQ
 **Q**: I thought that DUALSHOCK®4 works out of the box on Linux machines.
 
 **A**: You are correct. Once you plug in controller light bar turns blue,

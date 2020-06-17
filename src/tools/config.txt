@@ -4,7 +4,7 @@ T F #c280ff 100 100
 S Shift+K 50 75
 L1 Ctrl+W #0000ff 255 0
 R1 Ctrl+E 0 255
-L2 Alt+Q 0 0
+L2 lshift 0 0
 R2 Alt+E #1cd200 17
 Share Ctrl+Shift+Alt+6 #00ee00 0 200
 Options backspace

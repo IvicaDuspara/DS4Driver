@@ -1,4 +1,11 @@
 import sys
+joystick_button_dict = {'X' : 0, 'x' : 0, 'C' : 1, 'c' : 1, 'T' : 2, 't' : 2, 'S' : 3, 's' : 3, 'L1' : 4, 'l1' : 4, 'R1' : 5, 'r1' : 5,
+                        'l2' : 6, 'L2' : 6, 'r2' : 7, 'R2' : 7, 'Share' : 8, 'share' : 8, 'Options' : 9, 'options' : 9, 'PS' : 10, 'ps' : 10,
+                        'L3' : 11, 'l3' : 11, 'R3' : 12, 'r3' : 12, 'l3l' : 13, 'l3L' : 13, 'L3l' : 13, 'L3L' : 13, 'l3r' : 14, 'l3R' : 14,
+                        'L3r' : 14, 'L3R' : 14, 'l3u' : 15, 'l3U' : 15, 'L3u' : 15, 'L3U' : 15, 'l3d' : 16, 'l3D' : 16, 'L3d' : 16, 'L3D' : 16,
+                        'r3l' : 17, 'r3L' : 17, 'R3l' : 17, 'R3L' : 17, 'r3r' : 18, 'r3R' : 18, 'R3r' : 18, 'R3R' : 18, 'r3u' : 19, 'r3U' : 19,
+                        'R3u' : 19, 'R3U' : 19, 'r3d' : 20, 'r3D' : 20, 'R3d' : 20, 'R3D' : 20, 'dpadl' : 21, 'dpadL' : 21, 'dpadr' : 22, 'dpadR' : 22, 'dpadu' : 23,
+                        'dpadU' : 23, 'dpadd' : 24, 'dpadD' : 24}
 
 hr_key_code_dict = {'esc' : 1, '1' : 2, '2' : 3, '3' : 4, '4' : 5, '5' : 6, '6' : 7, '7' : 8, '8' : 9, '9' : 10, '0' : 11,
                  '\'' : 12, '+' : 13, 'backspace' : 14, 'Backspace' : 14, 'BACKSPACE' : 14, 'tab' : 15, 'Tab' : 15, 'TAB' : 15,
@@ -58,10 +65,12 @@ def convert(in_file, out_file, use_en = True):
      else:
         default_dict = hr_key_code_dict
      for line in i_handle:
-        splits = line.rstrip().split(" ")
+        splits = line.rstrip().lower().split(" ")
         new_s = ""
         for i in range(0,len(splits)):
-            if "+" in splits[i]:
+            if i == 0:
+                new_s += str(joystick_button_dict[splits[i]])
+            elif "+" in splits[i]:
                 secondsplits = splits[i].rstrip().split("+")
                 for j in range(0,len(secondsplits)-1):
                     new_s += secondsplits[j]

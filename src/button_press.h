@@ -1,15 +1,13 @@
 #ifndef DS4DRIVER_BUTTON_PRESS_H
 #define DS4DRIVER_BUTTON_PRESS_H
-#define LOCAL_BUFFER_SIZE 50
-
 struct button_press {
     int key_code;
-    struct button_modifiers {
-        unsigned int ctrl_mod : 1;
-        unsigned int shift_mod : 1;
-        unsigned int alt_mod : 1;
-    }modifiers;
     unsigned char RGB[3];
+    struct button_modifiers {
+        unsigned char ctrl_mod : 1;
+        unsigned char shift_mod : 1;
+        unsigned char alt_mod : 1;
+    }modifiers;
     short key_no;
     unsigned char h_motor_v;
     unsigned char l_motor_v;

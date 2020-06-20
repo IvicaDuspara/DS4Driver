@@ -14,6 +14,22 @@ struct button_press {
     unsigned char l_motor_v;
 };
 
+int parse_to_base10_integer(const char* number, int length) {
+    int base = 1;
+    int result = 0;
+    if(strlen(number) == length) {
+        for(int i = strlen(number) - 1; i >= 0; i--) {
+            int val = *(number + i) - '0';
+            result += base*val;
+            base*=10;
+        }
+        return result;
+    }
+    else {
+        return -1;
+    }
+}
+
 struct button_press generate_button_press_struct(char* parsed_input) {
     struct button_press bp;
     int i = 0;

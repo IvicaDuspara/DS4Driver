@@ -1,5 +1,5 @@
 # DS4Driver
-Linux userspace driver for DUALSHOCK®4
+Linux driver for DUALSHOCK®4
 
 [1. Introduction](#Introduction)
 

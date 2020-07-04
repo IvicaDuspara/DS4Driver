@@ -16,7 +16,7 @@ int main (int argc, char** argv) {
 
     unsigned char local_buffer[SEND_BUFFER_LENGTH];
     int hidraw_fd, js_fd;
-    if(read_config_file("../../tools/converted_config.txt",buttons,axes,default_rgb) == -1 ) {
+    if(read_config_file(argv[3],buttons,axes,default_rgb) == -1 ) {
         printf("Could not open configuration file at: %s\n",argv[3]);
         return 1;
     }

@@ -34,8 +34,7 @@ Generally speaking each valid line consists of following:
 5. 3 digits indicating heavy rumble strength (optional)
 6. 3 digits indicating light rumble strength (optional)
 
-Here are 2 examples of valid lines.
-Here are few examples of valid lines:
+Here are 2 examples of valid lines:
 
 + R1 Ctrl+R #ff0000 - (Pressing R1 on controller simulates Ctrl+R on keyboard, turns light to red)
 
@@ -44,6 +43,10 @@ Here are few examples of valid lines:
     
 If you wish to see a complete file check config.txt
 
+Additionally you can define default(idle) color which lightbar
+displays when connected with:
+
+default: #6-digits
 ### How to use config_converter.py
 
 Since "linux/input-event-codes.h" defines a number for each key on keyboard,

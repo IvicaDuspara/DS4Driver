@@ -20,7 +20,7 @@ int fill_sending_buffer(const struct button_press* bp, unsigned char* buffer, in
     return 1;
 }
 
-int read_config_file(const char* file_name, struct button_press* buttons, struct button_press* axes) {
+int read_config_file(const char* file_name, struct button_press* buttons, struct button_press* axes, int* rgb) {
     int count = 0;
     char local_buffer[CFGLINE_BUFFER_SIZE];
     FILE* handle = fopen(file_name,"r");
@@ -28,6 +28,10 @@ int read_config_file(const char* file_name, struct button_press* buttons, struct
         return -1;
     }
     while(fgets(local_buffer,CFGLINE_BUFFER_SIZE,handle) != NULL) {
+        if(strstr(local_buffer,"default:")) {
+            sscanf(local_buffer,"default: #%02x%02x%02x",&rgb[0],&rgb[1],&rgb[2]);
+            continue;
+        }
         if(count < 6 || (count > 7 && count < 13)) {
             struct button_press temp_bp = generate_button_press_struct(local_buffer);
             buttons[temp_bp.key_no] = temp_bp;

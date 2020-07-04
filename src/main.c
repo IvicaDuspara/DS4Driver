@@ -11,9 +11,11 @@ int main (int argc, char** argv) {
     }
     struct button_press buttons[DS4_BUTTON_NO];
     struct button_press axes[DS4_AXES_NO];
+    int default_rgb[3] = {0,0,255};
+
     unsigned char local_buffer[SEND_BUFFER_LENGTH];
     int hidraw_fd, js_fd;
-    if(read_config_file(argv[3],buttons,axes) == -1 ) {
+    if(read_config_file("../../tools/converted_config.txt",buttons,axes,default_rgb) == -1 ) {
         printf("Could not open configuration file at: %s\n",argv[3]);
         return 1;
     }

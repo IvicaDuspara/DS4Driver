@@ -63,7 +63,7 @@ struct button_press generate_button_press_struct(char* parsed_input) {
             }
             else {
                 int red,green,blue;
-                sscanf(split, "#%02d%02d%02d", &red, &green, &blue);
+                sscanf(split, "#%02x%02x%02x", &red, &green, &blue);
                 bp.RGB[0] = red;
                 bp.RGB[1] = green;
                 bp.RGB[2] = blue;

@@ -65,6 +65,10 @@ def convert(in_file, out_file, use_en = True):
      else:
         default_dict = hr_key_code_dict
      for line in i_handle:
+        if "default:" in line:
+            o_handle.write(line)
+            o_handle.write('\n')
+            continue
         splits = line.rstrip().lower().split(" ")
         new_s = ""
         for i in range(0,len(splits)):

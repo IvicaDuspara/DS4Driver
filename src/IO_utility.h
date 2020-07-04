@@ -78,4 +78,21 @@ int read_config_file(const char* file_name, struct button_press* buttons, struct
     }
     fclose(handle);
 }
+
+void add_default_colors(struct button_press* buttons, struct button_press* axes, const int* rgb) {
+    for(int i = 0; i < DS4_BUTTON_NO; i++) {
+        if(buttons[i].RGB[0] == 0 && buttons[i].RGB[1] == 0 && buttons[i].RGB[2] == 0) {
+            buttons[i].RGB[0] = rgb[0];
+            buttons[i].RGB[1] = rgb[1];
+            buttons[i].RGB[2] = rgb[2];
+        }
+    }
+    for(int i = 0; i < DS4_AXES_NO; i++) {
+        if(axes[i].RGB[0] == 0 && axes[i].RGB[1] == 0 && axes[i].RGB[2] == 0) {
+            axes[i].RGB[0] = rgb[0];
+            axes[i].RGB[1] = rgb[1];
+            axes[i].RGB[2] = rgb[2];
+        }
+    }
+}
 #endif //DS4DRIVER_IO_UTILITY_H

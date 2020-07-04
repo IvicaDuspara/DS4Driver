@@ -23,4 +23,4 @@
 22 32
 23 17
 24 31
-default: #00ff00
+default: #0000ff

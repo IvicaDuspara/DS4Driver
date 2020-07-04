@@ -20,6 +20,7 @@ int main (int argc, char** argv) {
         printf("Could not open configuration file at: %s\n",argv[3]);
         return 1;
     }
+    add_default_colors(buttons,axes,default_rgb);
 
     unsigned char default_buffer[SEND_BUFFER_LENGTH];
     if(fill_default_buffer(default_buffer,default_rgb,SEND_BUFFER_LENGTH) == -1){

@@ -23,4 +23,4 @@ DPADL A
 DPADR D
 DPADU W
 DPADD S
-default: #00ff00
+default: #0000ff

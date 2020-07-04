@@ -3,6 +3,22 @@
 #define SEND_BUFFER_LENGTH 32
 #include "button_press.h"
 #include <stdio.h>
+int fill_default_buffer(unsigned char* default_buffer, const int* rgb, int buffer_length) {
+    if(buffer_length < 32) {
+        return -1;
+    }
+    for(int i = 0; i < buffer_length; i++) {
+        default_buffer[i] = 0;
+    }
+    default_buffer[0] = 0x5;
+    default_buffer[1] = 0x3F;
+    default_buffer[4] = 0;
+    default_buffer[5] = 0;
+    default_buffer[6] = rgb[0];
+    default_buffer[7] = rgb[1];
+    default_buffer[8] = rgb[2];
+    return 1;
+}
 int fill_sending_buffer(const struct button_press* bp, unsigned char* buffer, int buffer_length) {
     if(buffer_length < 32) {
         return -1;

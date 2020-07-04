@@ -15,7 +15,7 @@ Linux driver for DUALSHOCK®4
 ## Introduction
 For questions and answers please see [FAQ](#FAQ). 
 
-This is a Linux userspace driver for DUALSHOCK®4. It provides
+This is a Linux user space driver for DUALSHOCK®4. It provides
 user with ability to map controller's buttons to keyboard buttons, assign macros to buttons, provide 
 ability to change color and add rumble on button press.
  
@@ -25,6 +25,17 @@ Configuration files describe button mapping. This is described in detail
 in ./tools/README.md
 
 <a name="Building"></a>
+To build this project you need CMake installed. Following code is an example which assumes you have downloaded source
+code into your home folder.
+```
+username@user: ~$ cd DS4Driver
+username@user: ~/DS4Driver$ mkdir build
+username@user: ~/DS4Driver$ cd build
+username@user: ~/DS4Driver/build$ cmake ..
+username@user: ~/DS4Driver/build cmake --build .
+```
+After executing commands above, you will see generated folder inside build folder. Navigate to bin folder inside build 
+folder. There you will find executable. Once built generated executable can be moved anywhere and run from that directory.
 <a name="Running"></a>
 
 <a name="FAQ"></a>

@@ -3,16 +3,17 @@
 #include <stdio.h>
 #include <linux/joystick.h>
 #include "IO_utility.h"
+
 int main (int argc, char** argv) {
     if(argc != 4 || strcmp("--help",argv[1]) == 0) {
         printf("Usage: ./ds4driver <path to /dev/js*> <path to /dev/hidraw*> <path to configuration file>");
         return 1;
     }
-    struct button_press buttons[13];
-    struct button_press axes[14];
-    unsigned char local_buffer[32];
+    struct button_press buttons[DS4_BUTTON_NO];
+    struct button_press axes[DS4_AXES_NO];
+    unsigned char local_buffer[SEND_BUFFER_LENGTH];
     int hidraw_fd, js_fd;
-    if(read_config_file("../../src/tools/converted_config.txt",buttons,axes) == -1 ) {
+    if(read_config_file(argv[3],buttons,axes) == -1 ) {
         printf("Could not open configuration file at: %s\n",argv[3]);
         return 1;
     }
@@ -33,7 +34,10 @@ int main (int argc, char** argv) {
             return 1;
         }
         if(js.type == 1) {
-            fill_sending_buffer(&buttons[js.number],local_buffer,32);
+            if(fill_sending_buffer(&buttons[js.number],local_buffer,SEND_BUFFER_LENGTH) == -1) {
+                printf("Error in filling buffer. Buffer is not large enough.\n");
+                return 1;
+            }
             write(hidraw_fd,local_buffer,sizeof(local_buffer));
         }
     }

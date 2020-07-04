@@ -1,5 +1,7 @@
 #ifndef DS4DRIVER_BUTTON_PRESS_H
 #define DS4DRIVER_BUTTON_PRESS_H
+#define DS4_BUTTON_NO 13
+#define DS4_AXES_NO 14
 #define CFGLINE_BUFFER_SIZE 50
 #include <linux/string.h>
 struct button_press {
@@ -14,7 +16,6 @@ struct button_press {
     unsigned char h_motor_v;
     unsigned char l_motor_v;
 };
-
 
 struct button_press generate_button_press_struct(char* parsed_input) {
     struct button_press bp;
@@ -50,14 +51,14 @@ struct button_press generate_button_press_struct(char* parsed_input) {
         }
         else {
             if(strlen(split) == 3) {
-                int mval;
-                sscanf(split, "%d", &mval);
+                int m_val;
+                sscanf(split, "%d", &m_val);
                 if(hm_marked == 0) {
                     hm_marked = 1;
-                    bp.h_motor_v = mval;
+                    bp.h_motor_v = m_val;
                 }
                 else {
-                    bp.l_motor_v = mval;
+                    bp.l_motor_v = m_val;
                 }
             }
             else {

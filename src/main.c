@@ -1,7 +1,7 @@
 #include <fcntl.h>
-#include <unistd.h>
-#include <stdio.h>
 #include <linux/joystick.h>
+#include <stdio.h>
+#include <unistd.h>
 #include "IO_utility.h"
 
 int main (int argc, char** argv) {

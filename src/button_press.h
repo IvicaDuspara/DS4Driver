@@ -1,7 +1,6 @@
 #ifndef DS4DRIVER_BUTTON_PRESS_H
 #define DS4DRIVER_BUTTON_PRESS_H
-#define DS4_FIRST_BUTTON 0
-#define DS4_LAST_BUTTON 24
+#define CFGLINE_BUFFER_SIZE 50
 #include <linux/string.h>
 struct button_press {
     int key_code;
@@ -16,30 +15,6 @@ struct button_press {
     unsigned char l_motor_v;
 };
 
-int parse_to_base10_integer(const char* number, unsigned long length) {
-    int base = 1;
-    int result = 0;
-    if(strlen(number) == length) {
-        for(unsigned long i = strlen(number) - 1; i >= 0; i--) {
-            int val = *(number + i) - '0';
-            result += base*val;
-            base*=10;
-        }
-        return result;
-    }
-    else {
-        return -1;
-    }
-}
-
-void parse_rgb(const char* number, struct button_press* bp) {
-    if(strlen(number) != 7) {
-        //TODO handle error
-    }
-    bp->RGB[0] = *(number + 1) * 10 + *(number + 2);
-    bp->RGB[1] = *(number + 3) * 10 + *(number + 4);
-    bp->RGB[2] = *(number + 5) * 10 + *(number + 6);
-}
 
 struct button_press generate_button_press_struct(char* parsed_input) {
     struct button_press bp;
@@ -48,19 +23,12 @@ struct button_press generate_button_press_struct(char* parsed_input) {
     unsigned char hm_marked = 0;
     while(split != NULL) {
         if(i == 0) {
-            int parsed = parse_to_base10_integer(split,strlen(split));
-            if(parsed < DS4_FIRST_BUTTON || parsed > DS4_LAST_BUTTON) {
-                //TODO error handling.
-            }
-            else {
-                bp.key_no = (short) parsed;
-            }
+            sscanf(split, "%hd", &bp.key_no);
         }
         else if(i == 1) {
             char *second_split = strsep(&split, "+");
             if(second_split == NULL) {
-              int parsed = parse_to_base10_integer(second_split,strlen(second_split));
-              bp.key_code = parsed;
+                sscanf(second_split, "%d", &bp.key_code);
             }
             else {
                 while(second_split != NULL) {
@@ -74,8 +42,7 @@ struct button_press generate_button_press_struct(char* parsed_input) {
                         bp.modifiers.alt_mod = 1;
                     }
                     else {
-                        int parsed = parse_to_base10_integer(second_split,strlen(second_split));
-                        bp.key_code = parsed;
+                        sscanf(second_split, "%d", &bp.key_code);
                     }
                     second_split = strsep(&split, "+");
                 }
@@ -83,7 +50,8 @@ struct button_press generate_button_press_struct(char* parsed_input) {
         }
         else {
             if(strlen(split) == 3) {
-                int mval = parse_to_base10_integer(split,strlen(split));
+                int mval;
+                sscanf(split, "%d", &mval);
                 if(hm_marked == 0) {
                     hm_marked = 1;
                     bp.h_motor_v = mval;
@@ -93,7 +61,11 @@ struct button_press generate_button_press_struct(char* parsed_input) {
                 }
             }
             else {
-               parse_rgb(split,&bp);
+                int red,green,blue;
+                sscanf(split, "#%02d%02d%02d", &red, &green, &blue);
+                bp.RGB[0] = red;
+                bp.RGB[1] = green;
+                bp.RGB[2] = blue;
             }
         }
         split = strsep(&parsed_input, " ");

@@ -77,7 +77,10 @@ def convert(in_file, out_file, use_en = True):
                     new_s += "+"
                 new_s += str(default_dict[secondsplits[-1]])
             else:
-                new_s += splits[i]
+                if splits[i] in default_dict:
+                    new_s += str(default_dict[splits[i]])
+                else:
+                    new_s += splits[i]
             if i != (len(splits) - 1):
                 new_s += ' '
         o_handle.write(new_s)

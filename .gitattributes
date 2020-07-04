@@ -1,1 +1,2 @@
 ./tools/* linguist-vendored
+*.* linguist-language=c

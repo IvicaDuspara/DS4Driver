@@ -1,8 +1,11 @@
 #include <fcntl.h>
 #include <linux/joystick.h>
+#include <linux/uinput.h>
 #include <stdio.h>
 #include <unistd.h>
 #include "IO_utility.h"
+
+
 
 int main (int argc, char** argv) {
     if(argc != 4 || strcmp("--help",argv[1]) == 0) {
@@ -11,11 +14,12 @@ int main (int argc, char** argv) {
     }
     struct button_press buttons[DS4_BUTTON_NO];
     struct button_press axes[DS4_AXES_NO];
+
     int default_rgb[3] = {0,0,255};
     int axes_offsets[] = {0,2,4,5,7,9,10,12};
 
     unsigned char local_buffer[SEND_BUFFER_LENGTH];
-    int hidraw_fd, js_fd;
+    int hidraw_fd, js_fd, uinput_fd;
     if(read_config_file(argv[3],buttons,axes,default_rgb) == -1 ) {
         printf("Could not open configuration file at: %s\n",argv[3]);
         return 1;
@@ -38,8 +42,14 @@ int main (int argc, char** argv) {
         printf("Could not open %s. Can not communicate with joystick.\n",argv[2]);
         return 1;
     }
+    uinput_fd = open("/dev/uinput",O_WRONLY | O_NONBLOCK);
+    if(uinput_fd == -1) {
+        printf("Could not open /dev/uinput.\n");
+        return 1;
+    }
     struct js_event js;
     write(hidraw_fd,default_buffer,sizeof(default_buffer));
+    prepare_uinput_io(uinput_fd,buttons,axes);
 
     while(1) {
         if(read(js_fd,&js,sizeof(struct js_event)) != sizeof(struct js_event)) {
@@ -53,9 +63,11 @@ int main (int argc, char** argv) {
                     return 1;
                 }
                 write(hidraw_fd,local_buffer,sizeof(local_buffer));
+                emit(uinput_fd,EV_KEY,buttons[js.number].key_code,1);
             }
             else if(js.value == 0) {
                 write(hidraw_fd,default_buffer,sizeof(default_buffer));
+                emit(uinput_fd,EV_SYN,SYN_REPORT,0);
             }
         }
         else if(js.type == 2) {
@@ -66,6 +78,7 @@ int main (int argc, char** argv) {
                         return 1;
                     }
                     write(hidraw_fd,local_buffer,sizeof(local_buffer));
+                    emit(uinput_fd,EV_KEY,axes[axes_offsets[js.number]].key_code,1);
                 }
                 else if(js.value > 0) {
                     if(fill_sending_buffer(&axes[axes_offsets[js.number] + 1],local_buffer,SEND_BUFFER_LENGTH) == -1) {
@@ -73,9 +86,11 @@ int main (int argc, char** argv) {
                         return 1;
                     }
                     write(hidraw_fd,local_buffer,sizeof(local_buffer));
+                    emit(uinput_fd,EV_KEY,axes[axes_offsets[js.number] + 1].key_code,1);
                 }
                 else {
                     write(hidraw_fd,default_buffer,sizeof(default_buffer));
+                    emit(uinput_fd,EV_SYN,SYN_REPORT,0);
                 }
             }
             else if(js.number == 2 || js.number == 5) {
@@ -85,9 +100,11 @@ int main (int argc, char** argv) {
                         return 1;
                     }
                     write(hidraw_fd,local_buffer,sizeof(local_buffer));
+                    emit(uinput_fd,EV_KEY,axes[axes_offsets[js.number]].key_code,1);
                 }
                 else {
                     write(hidraw_fd,default_buffer,sizeof(default_buffer));
+                    emit(uinput_fd,EV_SYN,SYN_REPORT,0);
                 }
             }
         }

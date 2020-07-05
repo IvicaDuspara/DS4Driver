@@ -77,6 +77,7 @@ int read_config_file(const char* file_name, struct button_press* buttons, struct
         count++;
     }
     fclose(handle);
+    return 1;
 }
 
 void add_default_colors(struct button_press* buttons, struct button_press* axes, const int* rgb) {
@@ -93,6 +94,51 @@ void add_default_colors(struct button_press* buttons, struct button_press* axes,
             axes[i].RGB[1] = rgb[1];
             axes[i].RGB[2] = rgb[2];
         }
+    }
+}
+
+void emit(int fd, int type, int code, int val){
+    struct input_event ie;
+    ie.type = type;
+    ie.code = code;
+    ie.value = val;
+    ie.time.tv_sec = 0;
+    ie.time.tv_usec = 0;
+    write(fd, &ie, sizeof(ie));
+}
+
+void prepare_uinput_io(int fd, struct button_press* buttons, struct button_press* axes) {
+    ioctl(fd, UI_SET_EVBIT, EV_KEY);
+    short alt_marked = 0, ctrl_marked = 0, shift_marked = 0;
+    for(int i = 0; i < DS4_BUTTON_NO; i++) {
+        if(alt_marked == 0 && buttons[i].modifiers.alt_mod == 1) {
+            alt_marked = 1;
+            ioctl(fd,UI_SET_KEYBIT,KEY_LEFTALT);
+        }
+        else if(ctrl_marked == 0 && buttons[i].modifiers.ctrl_mod == 1) {
+            ctrl_marked = 1;
+            ioctl(fd,UI_SET_KEYBIT,KEY_LEFTCTRL);
+        }
+        else if(shift_marked == 0 && buttons[i].modifiers.shift_mod == 1) {
+            shift_marked = 1;
+            ioctl(fd,UI_SET_KEYBIT,KEY_LEFTSHIFT);
+        }
+        ioctl(fd,UI_SET_KEYBIT,buttons[i].key_code);
+    }
+    for(int i = 0; i < DS4_AXES_NO; i++) {
+        if(alt_marked == 0 && axes[i].modifiers.alt_mod == 1) {
+            alt_marked = 1;
+            ioctl(fd,UI_SET_KEYBIT,KEY_LEFTALT);
+        }
+        else if(ctrl_marked == 0 && axes[i].modifiers.ctrl_mod == 1) {
+            ctrl_marked = 1;
+            ioctl(fd,UI_SET_KEYBIT,KEY_LEFTCTRL);
+        }
+        else if(shift_marked == 0 && axes[i].modifiers.shift_mod == 1) {
+            shift_marked = 1;
+            ioctl(fd,UI_SET_KEYBIT,KEY_LEFTSHIFT);
+        }
+        ioctl(fd,UI_SET_KEYBIT,axes[i].key_code);
     }
 }
 #endif //DS4DRIVER_IO_UTILITY_H
